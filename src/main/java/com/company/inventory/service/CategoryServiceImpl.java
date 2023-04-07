@@ -55,10 +55,12 @@ public class CategoryServiceImpl implements ICategoryService{
 
     @Override
     @Transactional
-    public void delete(Integer id) throws Exception {
+    public CategoryResponse delete(Integer id) throws Exception {
         Optional<Category> opt = iCategoryRepo.findById(id);
         if(!opt.isPresent())
             throw new Exception("No se encontró categoría con el id");
         iCategoryRepo.deleteById(id);
+        CategoryResponse cr = new CategoryResponse("DELETE", "204", LocalDateTime.now().toString(), List.of());
+        return cr;
     }
 }

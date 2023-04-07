@@ -10,5 +10,5 @@ public interface ICategoryService {
     CategoryResponse searchById(Integer id) throws Exception;
     CategoryResponse save(Category category) throws Exception;
     CategoryResponse update(Category category, Integer id) throws Exception;
-    void delete(Integer id) throws Exception;
+    CategoryResponse delete(Integer id) throws Exception;
 }

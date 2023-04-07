@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping("api/v1/categories")
 public class CategoryController {
@@ -32,9 +33,8 @@ public class CategoryController {
         return new ResponseEntity<>(iCategoryService.update(category, id), HttpStatus.OK);
     }
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") Integer id) throws Exception {
-        iCategoryService.delete(id);
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    public ResponseEntity<CategoryResponse> delete(@PathVariable(name = "id") Integer id) throws Exception {
+        return new ResponseEntity<>(iCategoryService.delete(id), HttpStatus.OK);
     }
 
 
