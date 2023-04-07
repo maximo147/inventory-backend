@@ -31,6 +31,11 @@ public class CategoryController {
     public ResponseEntity<CategoryResponse> save(@RequestBody Category category, @PathVariable(name = "id") Integer id) throws Exception {
         return new ResponseEntity<>(iCategoryService.update(category, id), HttpStatus.OK);
     }
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Integer id) throws Exception {
+        iCategoryService.delete(id);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
 
 
 }

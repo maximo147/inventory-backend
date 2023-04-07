@@ -52,4 +52,13 @@ public class CategoryServiceImpl implements ICategoryService{
         CategoryResponse cr = new CategoryResponse("PUT", "200", LocalDateTime.now().toString(), List.of(category1));
         return cr;
     }
+
+    @Override
+    @Transactional
+    public void delete(Integer id) throws Exception {
+        Optional<Category> opt = iCategoryRepo.findById(id);
+        if(!opt.isPresent())
+            throw new Exception("No se encontró categoría con el id");
+        iCategoryRepo.deleteById(id);
+    }
 }
