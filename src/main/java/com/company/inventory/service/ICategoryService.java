@@ -9,4 +9,5 @@ public interface ICategoryService {
     CategoryResponse search() throws Exception;
     CategoryResponse searchById(Integer id) throws Exception;
     CategoryResponse save(Category category) throws Exception;
+    CategoryResponse update(Category category, Integer id) throws Exception;
 }

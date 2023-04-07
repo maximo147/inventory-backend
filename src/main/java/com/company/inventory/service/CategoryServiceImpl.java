@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -33,10 +34,22 @@ public class CategoryServiceImpl implements ICategoryService{
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public CategoryResponse save(Category category) throws Exception {
         Category category1 = iCategoryRepo.save(category);
         CategoryResponse cr = new CategoryResponse("POST", "201", LocalDateTime.now().toString(), List.of(category1));
+        return cr;
+    }
+
+    @Override
+    @Transactional
+    public CategoryResponse update(Category category, Integer id) throws Exception {
+        Optional<Category> opt = iCategoryRepo.findById(id);
+        if(!opt.isPresent())
+            throw new Exception("No se encontró categoría con el id");
+        category.setIdCategory(id);
+        Category category1 = iCategoryRepo.save(category);
+        CategoryResponse cr = new CategoryResponse("PUT", "200", LocalDateTime.now().toString(), List.of(category1));
         return cr;
     }
 }

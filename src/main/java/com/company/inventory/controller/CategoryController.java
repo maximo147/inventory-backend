@@ -27,6 +27,10 @@ public class CategoryController {
     public ResponseEntity<CategoryResponse> save(@RequestBody Category category) throws Exception {
         return new ResponseEntity<>(iCategoryService.save(category), HttpStatus.CREATED);
     }
+    @PutMapping("edit/{id}")
+    public ResponseEntity<CategoryResponse> save(@RequestBody Category category, @PathVariable(name = "id") Integer id) throws Exception {
+        return new ResponseEntity<>(iCategoryService.update(category, id), HttpStatus.OK);
+    }
 
 
 }
