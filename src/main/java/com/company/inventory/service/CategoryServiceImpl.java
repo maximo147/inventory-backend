@@ -6,6 +6,7 @@ import com.company.inventory.response.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +21,13 @@ public class CategoryServiceImpl implements ICategoryService{
     @Transactional(readOnly = true)
     public CategoryResponse search() throws Exception {
         CategoryResponse cr = new CategoryResponse("GET", "200", LocalDateTime.now().toString(), iCategoryRepo.findAll());
+        return cr;
+    }
+
+    @Override
+    public CategoryResponse searchById(Integer id) throws Exception {
+        Category category = iCategoryRepo.findById(id).orElseThrow(() -> new Exception("Categoría no encontrada"));
+        CategoryResponse cr = new CategoryResponse("GET", "200", LocalDateTime.now().toString(), List.of(category));
         return cr;
     }
 }

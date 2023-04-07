@@ -11,10 +11,10 @@ import java.util.Map;
 @Getter
 public class CategoryResponse extends ResponseGenerico{
 
-    private List<Category> categories;
+    private List<Category> data;
 
     public CategoryResponse(String type, String code, String date, List<Category> categories) {
         super(type, code, date);
-        this.categories = categories;
+        this.data = categories;
     }
 }
