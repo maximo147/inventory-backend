@@ -25,9 +25,18 @@ public class CategoryServiceImpl implements ICategoryService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CategoryResponse searchById(Integer id) throws Exception {
         Category category = iCategoryRepo.findById(id).orElseThrow(() -> new Exception("Categoría no encontrada"));
         CategoryResponse cr = new CategoryResponse("GET", "200", LocalDateTime.now().toString(), List.of(category));
+        return cr;
+    }
+
+    @Override
+    @Transactional()
+    public CategoryResponse save(Category category) throws Exception {
+        Category category1 = iCategoryRepo.save(category);
+        CategoryResponse cr = new CategoryResponse("POST", "201", LocalDateTime.now().toString(), List.of(category1));
         return cr;
     }
 }

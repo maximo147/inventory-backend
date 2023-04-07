@@ -8,4 +8,5 @@ import java.util.List;
 public interface ICategoryService {
     CategoryResponse search() throws Exception;
     CategoryResponse searchById(Integer id) throws Exception;
+    CategoryResponse save(Category category) throws Exception;
 }
