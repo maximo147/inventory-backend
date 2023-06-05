@@ -21,8 +21,7 @@ public class CategoryServiceImpl implements ICategoryService{
     @Override
     @Transactional(readOnly = true)
     public CategoryResponse search() throws Exception {
-        CategoryResponse cr = new CategoryResponse("GET", "200", LocalDateTime.now().toString(), iCategoryRepo.findAll());
-        return cr;
+        return new CategoryResponse("GET", "200", LocalDateTime.now().toString(), iCategoryRepo.findAll());
     }
 
     @Override
