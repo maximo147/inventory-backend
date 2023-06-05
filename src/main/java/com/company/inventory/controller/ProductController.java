@@ -21,6 +21,11 @@ public class ProductController {
     @Autowired
     private IProductService service;
 
+    /**
+     * Get all products
+     * @return
+     * @throws Exception
+     */
     @GetMapping
     private ResponseEntity<ProductResponse> getAll() throws Exception {
         return new ResponseEntity<>(service.search(), HttpStatus.OK);
