@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@CrossOrigin("**")
 public class ProductController {
 
     @Autowired
@@ -31,11 +32,27 @@ public class ProductController {
         return new ResponseEntity<>(service.search(), HttpStatus.OK);
     }
 
+    /**
+     * Get Product by ID
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @GetMapping(path = "{id}")
     private ResponseEntity<ProductResponse> getById(@PathVariable(name = "id") Integer id )  throws Exception {
         return new ResponseEntity<>(service.searchById(id), HttpStatus.OK);
     }
 
+    /**
+     * Save a Product
+     * @param picture
+     * @param nombre
+     * @param price
+     * @param quantity
+     * @param category
+     * @return
+     * @throws Exception
+     */
     @PostMapping
     private ResponseEntity<ProductResponse> post(
                                                 @RequestParam("picture") MultipartFile picture,
@@ -56,13 +73,34 @@ public class ProductController {
     }
 
     @PutMapping(path = "edit/{id}")
-    private ResponseEntity<ProductResponse> update(@RequestBody Product product, @PathVariable(name = "id") Integer id)  throws Exception {
-        return new ResponseEntity<>(service.update(product, id), HttpStatus.OK);
+    private ResponseEntity<ProductResponse> update(
+                                                @RequestParam("picture") MultipartFile picture,
+                                                @RequestParam("nombre") String nombre,
+                                                @RequestParam("price") Double price,
+                                                @RequestParam("quantity") Integer quantity,
+                                                @RequestParam("category") Integer category,
+                                                @PathVariable("id") Integer id
+    ) throws Exception {
+        byte[] aux = picture.getBytes();
+
+        Product product = new Product();
+        product.setId(id);
+        product.setNombre(nombre);
+        product.setPrice(price);
+        product.setQuantity(quantity);
+        product.setPicture(Utils.compressZLib(aux));
+
+        return new ResponseEntity<>(service.update(product, id, category), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "delete/{id}")
     private ResponseEntity<ProductResponse> delete(@PathVariable(name = "id") Integer id)  throws Exception {
         return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "name/{name}")
+    private ResponseEntity<ProductResponse> getByName(@PathVariable("name") String name) throws Exception {
+        return new ResponseEntity<>(service.getByNameLike(name), HttpStatus.OK);
     }
 
 }

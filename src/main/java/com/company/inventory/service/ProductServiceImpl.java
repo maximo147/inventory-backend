@@ -25,38 +25,60 @@ public class ProductServiceImpl implements IProductService{
     @Override
     @Transactional(readOnly = true)
     public ProductResponse search() throws Exception {
-        return new ProductResponse("GET", "200", LocalDateTime.now().toString(), iProductRepo.findAll());
+        List<Product> productList = iProductRepo.findAll();
+        productList
+                .forEach((p) -> {
+                    if(p.getPicture().length > 0)
+                        p.setPicture(Utils.decompressZLib(p.getPicture()));
+                });
+        return new ProductResponse("GET", "200", LocalDateTime.now().toString(), productList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ProductResponse searchById(Integer id) throws Exception {
         Product product = iProductRepo.findById(id).orElseThrow(() -> new Exception("No se encontró producto"));
-        product.setPicture(Utils.decompressZLib(product.getPicture()));
+        if(product != null){
+            product.setPicture(Utils.decompressZLib(product.getPicture()));
+        }
         return new ProductResponse("GET", "200", LocalDateTime.now().toString(), List.of(product));
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public ProductResponse save(Product product, Integer category) throws Exception {
         Category category1 = iCategoryRepo.findById(category).orElseThrow(() -> new Exception("No se encontró la categoría"));
         product.setCategory(category1);
         iProductRepo.save(product);
+        System.out.println(product.getPicture().length);
         return new ProductResponse("POST", "201", LocalDateTime.now().toString(), List.of(product));
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public ProductResponse update(Product product, Integer id) throws Exception {
+    @Transactional
+    public ProductResponse update(Product product, Integer id, Integer category) throws Exception {
+        Category category1 = iCategoryRepo.findById(category).orElseThrow(() -> new Exception("No se encontro categoría"));
         Product p1 = iProductRepo.findById(id).orElseThrow(() -> new Exception("No se encontró producto"));
+        product.setCategory(category1);
+        if(product.getPicture().length <= 8 && p1.getPicture().length > 8){
+            product.setPicture(p1.getPicture());
+        }
         return new ProductResponse("PUT", "204", LocalDateTime.now().toString(), List.of(iProductRepo.save(product)));
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public ProductResponse delete(Integer id) throws Exception {
         Product p1 = iProductRepo.findById(id).orElseThrow(() -> new Exception("No se encontró producto"));
         iProductRepo.delete(p1);
         return new ProductResponse("DELETE", "200", LocalDateTime.now().toString(), List.of());
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public ProductResponse getByNameLike(String name) throws Exception{
+        List<Product> products = iProductRepo.getByNameLike(name);
+        products
+                .forEach(p -> p.setPicture(Utils.decompressZLib(p.getPicture())));
+        return new ProductResponse("GET", "200", LocalDateTime.now().toString(), products);
     }
 }

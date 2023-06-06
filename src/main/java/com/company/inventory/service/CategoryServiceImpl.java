@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements ICategoryService{
     @Transactional
     public CategoryResponse update(Category category, Integer id) throws Exception {
         Optional<Category> opt = iCategoryRepo.findById(id);
-        if(!opt.isPresent())
+        if(opt.isEmpty())
             throw new Exception("No se encontró categoría con el id");
         category.setIdCategory(id);
         Category category1 = iCategoryRepo.save(category);
